@@ -84,6 +84,7 @@ public class WalletServiceImpl implements WalletService {
             UUID.randomUUID(), wallet.getWalletId(), operationType, amount, LocalDateTime.now());
 
     transactionsRepository.save(TransactionDataMapper.toDatasource(transaction, wallet));
+
     return transaction;
   }
 
