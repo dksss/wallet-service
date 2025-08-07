@@ -1,8 +1,8 @@
 package org.jodyvole.walletservice.domain.service;
 
-import org.jodyvole.walletservice.domain.model.OperationType;
 import org.jodyvole.walletservice.domain.model.Transaction;
 import org.jodyvole.walletservice.domain.model.Wallet;
+import org.jodyvole.walletservice.web.dto.TransactionRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,7 +12,7 @@ public interface WalletService {
 
   Wallet create();
 
-  Transaction processOperation(UUID walletId, OperationType operationType, Long amount);
+  Transaction processTransaction(TransactionRequest request);
 
   BigDecimal getBalance(UUID walletId);
 
