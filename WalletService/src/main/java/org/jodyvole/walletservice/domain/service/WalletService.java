@@ -18,4 +18,6 @@ public interface WalletService {
 
   List<Transaction> getAllOperations(UUID walletId);
 
+  List<Wallet> getAllWallets();
+
 }
