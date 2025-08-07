@@ -4,6 +4,8 @@ import org.jodyvole.walletservice.datasource.entities.TransactionEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface TransactionsRepository extends CrudRepository<TransactionEntity, Long> {
+public interface TransactionsRepository extends CrudRepository<TransactionEntity, UUID> {
 }
