@@ -6,7 +6,7 @@ import org.jodyvole.walletservice.datasource.entities.WalletEntity;
 import org.jodyvole.walletservice.domain.model.Wallet;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class WalletMapper {
+public final class WalletDataMapper {
 
   public static Wallet toDomain(WalletEntity walletEntity) {
     return new Wallet(walletEntity.getId(), walletEntity.getBalance());
