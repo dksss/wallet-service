@@ -2,36 +2,39 @@ package org.jodyvole.walletservice.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jodyvole.walletservice.domain.exceptions.InvalidAmountException;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Wallet {
 
-  private UUID walletId;
-  private Long balance;
+  private final UUID walletId;
+  private BigDecimal balance;
 
-  public void deposit(Long amount) {
-    validateAmount(amount);
-    balance += amount;
+  public Wallet() {
+    this.walletId = UUID.randomUUID();
+    this.balance = BigDecimal.ZERO;
   }
 
-  public void withdraw(Long amount) {
+  public void deposit(BigDecimal amount) {
     validateAmount(amount);
-    if (balance < amount) {
+    balance = balance.add(amount);
+  }
+
+  public void withdraw(BigDecimal amount) {
+    validateAmount(amount);
+    if (balance.subtract(amount).compareTo(BigDecimal.ZERO) < 0) {
       throw new InvalidAmountException("not enough money to withdraw.");
     }
-    balance -= amount;
+
+    balance = balance.subtract(amount);
   }
 
-  private void validateAmount(Long amount) {
-    if (amount == null || amount <= 0) {
+  private void validateAmount(BigDecimal amount) {
+    if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
       throw new InvalidAmountException("Amount must be greater than zero.");
     }
   }
