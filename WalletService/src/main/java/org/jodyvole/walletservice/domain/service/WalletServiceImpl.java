@@ -1,8 +1,8 @@
 package org.jodyvole.walletservice.domain.service;
 
 import lombok.RequiredArgsConstructor;
-import org.jodyvole.walletservice.datasource.mappers.TransactionMapper;
-import org.jodyvole.walletservice.datasource.mappers.WalletMapper;
+import org.jodyvole.walletservice.datasource.mappers.TransactionDataMapper;
+import org.jodyvole.walletservice.datasource.mappers.WalletDataMapper;
 import org.jodyvole.walletservice.datasource.repository.TransactionsRepository;
 import org.jodyvole.walletservice.datasource.repository.WalletRepository;
 import org.jodyvole.walletservice.domain.exceptions.InvalidOperationTypeException;
@@ -30,7 +30,7 @@ public class WalletServiceImpl implements WalletService {
   @Override
   public Wallet create() {
     Wallet wallet = new Wallet();
-    walletRepository.save(WalletMapper.toDatasource(wallet));
+    walletRepository.save(WalletDataMapper.toDatasource(wallet));
     return wallet;
   }
 
@@ -52,20 +52,20 @@ public class WalletServiceImpl implements WalletService {
   @Override
   public List<Transaction> getAllOperations(UUID walletId) {
     return transactionsRepository.findAllOperationsByWallet(walletId).stream()
-            .map(TransactionMapper::toDomain)
+            .map(TransactionDataMapper::toDomain)
             .collect(Collectors.toList());
   }
 
   @Override
   public List<Wallet> getAllWallets() {
     return walletRepository.findAll().stream()
-            .map(WalletMapper::toDomain)
+            .map(WalletDataMapper::toDomain)
             .collect(Collectors.toList());
   }
 
   private Wallet findWallet(UUID walletId) {
     return walletRepository.findById(walletId)
-            .map(WalletMapper::toDomain)
+            .map(WalletDataMapper::toDomain)
             .orElseThrow(() -> new InvalidWalletException("Wallet with this id does not exist: " + walletId));
   }
 
@@ -83,7 +83,7 @@ public class WalletServiceImpl implements WalletService {
     Transaction transaction = new Transaction(
             UUID.randomUUID(), wallet.getWalletId(), operationType, amount, LocalDateTime.now());
 
-    transactionsRepository.save(TransactionMapper.toDatasource(transaction, wallet));
+    transactionsRepository.save(TransactionDataMapper.toDatasource(transaction, wallet));
     return transaction;
   }
 
@@ -94,7 +94,7 @@ public class WalletServiceImpl implements WalletService {
       default -> throw new InvalidOperationTypeException("Not supported operation type: " + operationType.name());
     }
 
-    walletRepository.save(WalletMapper.toDatasource(wallet));
+    walletRepository.save(WalletDataMapper.toDatasource(wallet));
   }
 
 }

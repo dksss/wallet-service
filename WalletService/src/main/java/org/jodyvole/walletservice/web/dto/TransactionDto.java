@@ -17,7 +17,7 @@ public class TransactionDto {
 
   private UUID id;
   private UUID walletId;
-  private String operation;
+  private String operationType;
   private BigDecimal amount;
   private LocalDateTime createdAt;
 
