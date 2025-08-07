@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -24,5 +25,6 @@ public class WalletEntity {
   private UUID id;
 
   @Column(name = "balance")
-  private Long balance;
+  private BigDecimal balance;
+
 }
