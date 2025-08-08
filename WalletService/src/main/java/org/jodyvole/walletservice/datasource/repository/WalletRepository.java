@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface WalletRepository extends CrudRepository<WalletEntity, UUID> {
 
-  public List<WalletEntity> findAll();
+  List<WalletEntity> findAll();
 
 }
