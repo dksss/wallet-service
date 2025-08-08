@@ -8,7 +8,7 @@ import org.jodyvole.walletservice.web.dto.WalletDto;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class WalletWebMapper {
 
-  public static WalletDto toWeb(Wallet wallet ) {
+  public static WalletDto toWeb(Wallet wallet) {
     return new WalletDto(wallet.getWalletId(), wallet.getBalance());
   }
 
