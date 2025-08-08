@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-wallets-data
+      author: jodyvole
+      changes:
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: id
+                  value: "550e8400-e29b-41d4-a716-446655440000"
+              - column:
+                  name: balance
+                  valueNumeric: 1000.50
+
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: id
+                  value: "550e8400-e29b-41d4-a716-446655440001"
+              - column:
+                  name: balance
+                  valueNumeric: 250.75
+
+        - insert:
+            tableName: wallets
+            columns:
+              - column:
+                  name: id
+                  value: "550e8400-e29b-41d4-a716-446655440002"
+              - column:
+                  name: balance
+                  valueNumeric: 0.0
+
+  - changeSet:
+      id: insert-transactions-data
+      author: jodyvole
+      changes:
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  value: "770e8400-e29b-41d4-a716-446655440002"
+              - column:
+                  name: wallet_id
+                  value: "550e8400-e29b-41d4-a716-446655440000"
+              - column:
+                  name: operation_type
+                  value: "DEPOSIT"
+              - column:
+                  name: amount
+                  valueNumeric: 1000.50
+              - column:
+                  name: created_at
+                  valueDate: "2025-08-08T17:00:00"
+
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  value: "880e8400-e29b-41d4-a716-446655440003"
+              - column:
+                  name: wallet_id
+                  value: "550e8400-e29b-41d4-a716-446655440001"
+              - column:
+                  name: operation_type
+                  value: "WITHDRAWAL"
+              - column:
+                  name: amount
+                  valueNumeric: 50.25
+              - column:
+                  name: created_at
+                  valueDate: "2025-08-07T10:30:00"
