@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-wallets-table
+      author: jodyvole
+      changes:
+        - createTable:
+            tableName: wallets
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: balance
+                  type: NUMERIC(19,2)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-transactions-table
+      author: jodyvole
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: wallet_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: operation_type
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: NUMERIC(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: fk-transactions-wallet_id
+      author: jodyvole
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: wallet_id
+            constraintName: fk_transactions_wallet_id
+            referencedTableName: wallets
+            referencedColumnNames: id
+            onDelete: CASCADE
