@@ -1,0 +1,19 @@
+services:
+  postgres_db:
+    image: postgres:17-alpine
+    container_name: wallet_service_bd
+    env_file:
+      - secrets.env
+    ports:
+      - "5454:5432"
+
+  wallet_app:
+    build: .
+    container_name: wallet_app
+    ports:
+      - "8080:8080"
+    env_file:
+      - secrets.env
+    restart: unless-stopped
+    depends_on:
+      - postgres_db
