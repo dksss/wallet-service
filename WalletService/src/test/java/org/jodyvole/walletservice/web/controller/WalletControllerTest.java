@@ -1,6 +1,8 @@
 package org.jodyvole.walletservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jodyvole.walletservice.domain.exceptions.InvalidAmountException;
+import org.jodyvole.walletservice.domain.exceptions.InvalidWalletException;
 import org.jodyvole.walletservice.domain.model.OperationType;
 import org.jodyvole.walletservice.domain.model.Transaction;
 import org.jodyvole.walletservice.domain.model.Wallet;
@@ -110,5 +112,63 @@ class WalletControllerTest {
             .andExpect(jsonPath("$", hasSize(wallets.size())));
   }
 
+  @Test
+  @DisplayName("POST /wallet - should fail validation")
+  void invalidTransactionTest() throws Exception {
+    TransactionRequest request = new TransactionRequest(null, "invalid", BigDecimal.valueOf(-100));
+
+    mockMvc.perform(post("/api/v1/wallet")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.walletId", is("Wallet id must be provided")))
+            .andExpect(jsonPath("$.operationType", is("Operation type must be DEPOSIT or WITHDRAW")))
+            .andExpect(jsonPath("$.amount", is("Amount must be positive")));
+  }
+
+  @Test
+  @DisplayName("POST /wallet - should throw exception of invalid wallet")
+  void invalidWalletTest() throws Exception {
+    UUID walletId = UUID.randomUUID();
+    TransactionRequest request = new TransactionRequest(walletId, "withdraw", BigDecimal.valueOf(100));
+
+    Mockito.when(walletService.processTransaction(Mockito.any()))
+            .thenThrow(new InvalidWalletException("Wallet not found"));
+
+    mockMvc.perform(post("/api/v1/wallet")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("Wallet not found"));
+  }
+
+  @Test
+  @DisplayName("POST /wallet - should fail validation of operation type")
+  void invalidOperationTypeTest() throws Exception {
+    UUID walletId = UUID.randomUUID();
+    TransactionRequest request = new TransactionRequest(walletId, "invalid", BigDecimal.valueOf(100));
+
+    mockMvc.perform(post("/api/v1/wallet")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.operationType", is("Operation type must be DEPOSIT or WITHDRAW")));
+  }
+
+  @Test
+  @DisplayName("POST /wallet - should throw exception of invalid amount")
+  void invalidAmountTest() throws Exception {
+    UUID walletId = UUID.randomUUID();
+    TransactionRequest request = new TransactionRequest(walletId, "withdraw", BigDecimal.valueOf(1000));
+
+    Mockito.when(walletService.processTransaction(Mockito.any()))
+            .thenThrow(new InvalidAmountException("Not enough money to withdraw"));
+
+    mockMvc.perform(post("/api/v1/wallet")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string("Not enough money to withdraw"));
+  }
 
 }
